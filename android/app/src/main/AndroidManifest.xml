@@ -1,26 +1,97 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <!-- Network Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- ===== BLUETOOTH PERMISSIONS - OPTIMIZED FOR ALL ANDROID VERSIONS ===== -->
+    
+    <!-- Legacy Bluetooth Permissions (Android 11 and below) -->
+    <uses-permission 
+        android:name="android.permission.BLUETOOTH" 
+        android:maxSdkVersion="30" />
+    <uses-permission 
+        android:name="android.permission.BLUETOOTH_ADMIN" 
+        android:maxSdkVersion="30" />
+    
+    <!-- Modern Bluetooth Permissions (Android 12+) -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation"
+        tools:replace="android:usesPermissionFlags" />
+    <uses-permission 
+        android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission 
+        android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    
+    <!-- Location Permission (Required for BLE scanning on Android 6-11) -->
+    <uses-permission 
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="30" />
+    <uses-permission 
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:maxSdkVersion="30" />
+    
+    <!-- ===== HARDWARE FEATURE DECLARATIONS ===== -->
+    
+    <!-- BLE Feature - REQUIRED for HealthTrack Medical App -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+        
+    <!-- Bluetooth Classic Feature -->
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="true" />
+        
+    <!-- Location Feature - Required for BLE on older Android versions -->
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+        
+    <!-- GPS Feature - Optional -->
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    
+    <!-- Camera Feature - Optional (if app has other features) -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    
+    <!-- ===== APPLICATION CONFIGURATION ===== -->
+    
     <application
-      android:name=".MainApplication"
-      android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
-      android:roundIcon="@mipmap/ic_launcher_round"
-      android:allowBackup="false"
-      android:theme="@style/AppTheme"
-      android:supportsRtl="true">
-      <activity
-        android:name=".MainActivity"
+        android:name=".MainApplication"
         android:label="@string/app_name"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustResize"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:allowBackup="false"
+        android:theme="@style/AppTheme"
+        android:supportsRtl="true"
+        android:hardwareAccelerated="true"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="false"
+        tools:replace="android:usesCleartextTraffic">
+        
+        <!-- ===== MAIN ACTIVITY ===== -->
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|density|layoutDirection|locale|touchscreen|navigation|keyboardHidden|fontScale"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"
+            android:exported="true">
+            
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+        </activity>
+        
     </application>
+    
 </manifest>
